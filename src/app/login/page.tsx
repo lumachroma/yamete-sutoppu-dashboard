@@ -3,8 +3,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { LoginFormData } from '@/types';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+import { authApi } from '@/services/api';
 
 export default function LoginPage() {
   const [formData, setFormData] = useState<LoginFormData>({ emailOrPhone: '', otp: '' });
@@ -34,17 +33,13 @@ export default function LoginPage() {
       setLoading(true);
       clearMessages();
 
-      const response = await fetch(`${API_BASE_URL}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(
-          formData.emailOrPhone.includes('@')
-            ? { email: formData.emailOrPhone }
-            : { phone: formData.emailOrPhone }
-        ),
-      });
+      const loginData = formData.emailOrPhone.includes('@')
+        ? { email: formData.emailOrPhone }
+        : { phone: formData.emailOrPhone };
 
+      const response = await authApi.login(loginData);
       const data = await response.json();
+      
       if (!response.ok) {
         throw new Error(data.message || 'Login failed');
       }
@@ -72,14 +67,9 @@ export default function LoginPage() {
       setLoading(true);
       clearMessages();
 
-      const response = await fetch(`${API_BASE_URL}/auth/verify-otp`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ attemptId, otp: formData.otp }),
-        credentials: 'include',
-      });
-
+      const response = await authApi.verifyOtp({ attemptId, otp: formData.otp });
       const data = await response.json();
+      
       if (!response.ok) {
         throw new Error(data.message || 'OTP verification failed');
       }

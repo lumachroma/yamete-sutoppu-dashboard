@@ -36,20 +36,29 @@ export type ModalType = typeof MODAL_TYPES[keyof typeof MODAL_TYPES];
 
 // API endpoints
 export const API_ENDPOINTS = {
-  AUTH: {
-    LOGIN: '/auth/login',
-    VERIFY_OTP: '/auth/verify-otp',
-    REFRESH: '/auth/refresh',
+  // Public endpoints (no authentication required)
+  PUBLIC: {
+    HEALTH: '/public/health',
+    INFO: '/public/info',
+    AUTH: {
+      LOGIN: '/public/auth/login',
+      VERIFY_OTP: '/public/auth/verify-otp',
+      REFRESH: '/public/auth/refresh-token',
+      LOGOUT_EVERYWHERE: '/public/auth/logout-everywhere',
+    },
   },
-  USERS: {
-    LIST: '/users',
-    BY_ID: (id: string) => `/users/${id}`,
-    CREATE: '/users',
-    UPDATE: (id: string) => `/users/${id}`,
-    DELETE: (id: string) => `/users/${id}`,
-  },
-  PROTECTED: {
-    IDENTITY: '/protected/identity',
-    DASHBOARD: '/protected/dashboard',
+  // Private endpoints (authentication required)
+  PRIVATE: {
+    IDENTITY: {
+      GET: '/private/identity/identity',
+      DASHBOARD: '/private/identity/dashboard',
+    },
+    USERS: {
+      LIST: '/private/users',
+      BY_ID: (id: string) => `/private/users/${id}`,
+      CREATE: '/private/users',
+      UPDATE: (id: string) => `/private/users/${id}`,
+      DELETE: (id: string) => `/private/users/${id}`,
+    },
   },
 } as const;

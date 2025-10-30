@@ -3,8 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { User, Pagination, UsersResponse, UserFormData } from '@/types';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+import { usersApi } from '@/services/api';
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -35,12 +34,7 @@ export default function UsersPage() {
 
     try {
       setLoading(true);
-      const response = await fetch(`${API_BASE_URL}/users?page=${page}&limit=10`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-        credentials: 'include',
-      });
+      const response = await usersApi.getUsers(page, 10);
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -76,21 +70,9 @@ export default function UsersPage() {
       setSubmitting(true);
       setError('');
 
-      const url = editingUser 
-        ? `${API_BASE_URL}/users/${editingUser._id}`
-        : `${API_BASE_URL}/users`;
-      
-      const method = editingUser ? 'PUT' : 'POST';
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        credentials: 'include',
-        body: JSON.stringify(formData),
-      });
+      const response = editingUser 
+        ? await usersApi.updateUser(editingUser._id, formData)
+        : await usersApi.createUser(formData);
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -116,13 +98,7 @@ export default function UsersPage() {
     if (!token) return;
 
     try {
-      const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-        credentials: 'include',
-      });
+      const response = await usersApi.deleteUser(userId);
 
       if (!response.ok) {
         const errorData = await response.json();

@@ -3,8 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Identity, UserFormData } from '@/types';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+import { identityApi, usersApi } from '@/services/api';
 
 // Profile form data is the same as user form data
 type ProfileFormData = UserFormData;
@@ -38,13 +37,7 @@ export default function ProfilePage() {
       setLoading(true);
       setError('');
       
-      const response = await fetch(`${API_BASE_URL}/protected/identity`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-        credentials: 'include',
-      });
+      const response = await identityApi.getIdentity();
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -79,15 +72,7 @@ export default function ProfilePage() {
       setError('');
       setSuccessMessage('');
 
-      const response = await fetch(`${API_BASE_URL}/users/${identity.sub}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        credentials: 'include',
-        body: JSON.stringify(formData),
-      });
+      const response = await usersApi.updateUser(identity.sub, formData);
 
       if (!response.ok) {
         const errorData = await response.json();
