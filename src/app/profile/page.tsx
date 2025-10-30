@@ -3,8 +3,16 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
+interface Identity {
+  sub: string;
+  email?: string;
+  phone?: string;
+  iat?: number;
+  exp?: number;
+}
+
 export default function ProfilePage() {
-  const [identity, setIdentity] = useState<any>(null);
+  const [identity, setIdentity] = useState<Identity | null>(null);
   const [error, setError] = useState('');
   const router = useRouter();
 

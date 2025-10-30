@@ -29,8 +29,8 @@ export default function LoginPage() {
       if (!res.ok) throw new Error(data.message || 'Login failed');
       setAttemptId(data.attemptId);
       setStep(2);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
     }
   };
 
@@ -52,8 +52,8 @@ export default function LoginPage() {
         localStorage.setItem('accessToken', data.accessToken);
       }
       router.push('/profile');
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
     }
   };
 
