@@ -70,7 +70,7 @@ export default function UsersPage() {
       setSubmitting(true);
       setError('');
 
-      const response = editingUser 
+      const response = editingUser
         ? await usersApi.updateUser(editingUser._id, formData)
         : await usersApi.createUser(formData);
 
@@ -135,6 +135,12 @@ export default function UsersPage() {
     setError('');
   };
 
+  // Logout function
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken');
+    router.push('/login');
+  };
+
   useEffect(() => {
     fetchUsers();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -154,20 +160,35 @@ export default function UsersPage() {
       <div className="max-w-6xl mx-auto">
         <div className="mb-4">
           <Link
+            href="/profile"
+            className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+          >
+            👤 Profile
+          </Link>
+          &nbsp;&nbsp;
+          <Link
             href="/"
             className="text-blue-600 hover:text-blue-800 text-sm font-medium"
           >
-            ← Back to Home
+            🏠 Back to Home
           </Link>
         </div>
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">User Management</h1>
-          <button
-            onClick={openCreateModal}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
-            Add User
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={openCreateModal}
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Add User
+            </button>
+            <button
+              onClick={handleLogout}
+              className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+            >
+              Logout
+            </button>
+          </div>
         </div>
 
         {error && (
@@ -275,11 +296,10 @@ export default function UsersPage() {
                       <button
                         key={page}
                         onClick={() => fetchUsers(page)}
-                        className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
-                          page === currentPage
-                            ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
-                            : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
-                        }`}
+                        className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${page === currentPage
+                          ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
+                          : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+                          }`}
                       >
                         {page}
                       </button>

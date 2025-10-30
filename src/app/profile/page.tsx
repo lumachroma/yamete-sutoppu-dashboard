@@ -36,7 +36,7 @@ export default function ProfilePage() {
     try {
       setLoading(true);
       setError('');
-      
+
       const response = await identityApi.getIdentity();
 
       if (!response.ok) {
@@ -92,9 +92,9 @@ export default function ProfilePage() {
   // Open edit modal
   const openEditModal = () => {
     if (identity) {
-      setFormData({ 
-        email: identity.email || '', 
-        phone: identity.phone || '' 
+      setFormData({
+        email: identity.email || '',
+        phone: identity.phone || ''
       });
       setShowEditModal(true);
       setError('');
@@ -122,7 +122,7 @@ export default function ProfilePage() {
   if (loading && !identity) {
     return (
       <div className="min-h-screen bg-gray-50 p-8">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center">Loading...</div>
         </div>
       </div>
@@ -131,13 +131,20 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <div className="mb-4">
+          <Link
+            href="/users"
+            className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+          >
+            👥 User Management
+          </Link>
+          &nbsp;&nbsp;
           <Link
             href="/"
             className="text-blue-600 hover:text-blue-800 text-sm font-medium"
           >
-            ← Back to Home
+            🏠 Back to Home
           </Link>
         </div>
         <div className="flex justify-between items-center mb-6">
