@@ -2,13 +2,9 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { LoginFormData } from '@/types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-interface LoginFormData {
-  emailOrPhone: string;
-  otp: string;
-}
 
 export default function LoginPage() {
   const [formData, setFormData] = useState<LoginFormData>({ emailOrPhone: '', otp: '' });

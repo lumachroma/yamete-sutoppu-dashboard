@@ -2,21 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Identity, UserFormData } from '@/types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-interface Identity {
-  sub: string;
-  email?: string;
-  phone?: string;
-  iat?: number;
-  exp?: number;
-}
-
-interface ProfileFormData {
-  email: string;
-  phone: string;
-}
+// Profile form data is the same as user form data
+type ProfileFormData = UserFormData;
 
 export default function ProfilePage() {
   const [identity, setIdentity] = useState<Identity | null>(null);

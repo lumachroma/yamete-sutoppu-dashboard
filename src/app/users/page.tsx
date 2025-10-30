@@ -2,33 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { User, Pagination, UsersResponse, UserFormData } from '@/types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-interface User {
-  _id: string;
-  email?: string;
-  phone?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface Pagination {
-  page: number;
-  limit: number;
-  total: number;
-  pages: number;
-}
-
-interface UsersResponse {
-  users: User[];
-  pagination: Pagination;
-}
-
-interface UserFormData {
-  email: string;
-  phone: string;
-}
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
